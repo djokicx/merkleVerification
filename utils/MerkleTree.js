@@ -1,10 +1,15 @@
-const { keccak256 } = require('ethereum-cryptography/keccak');
-const { bytesToHex } = require('ethereum-cryptography/utils');
+const { keccak256 } = require("ethereum-cryptography/keccak");
+const { bytesToHex } = require("ethereum-cryptography/utils");
+const list = require("./niceList.json");
 
 class MerkleTree {
   constructor(leaves) {
     this.leaves = leaves.map(Buffer.from).map(keccak256);
     this.concat = (left, right) => keccak256(Buffer.concat([left, right]));
+  }
+
+  static constructTree() {
+    return new MerkleTree(list);
   }
 
   getRoot() {
@@ -37,11 +42,7 @@ class MerkleTree {
       }
     }
 
-    return this.getProof(
-      Math.floor(index / 2),
-      newLayer,
-      proof
-    );
+    return this.getProof(Math.floor(index / 2), newLayer, proof);
   }
 
   // private function

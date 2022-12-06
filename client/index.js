@@ -1,17 +1,21 @@
-const axios = require('axios');
-const niceList = require('../utils/niceList.json');
-const MerkleTree = require('../utils/MerkleTree');
+const axios = require("axios");
+const niceList = require("../utils/niceList.json");
 
-const serverUrl = 'http://localhost:1225';
+const MerkleTree = require("../utils/MerkleTree");
+
+const serverUrl = "http://localhost:1225";
+const TREE = MerkleTree.constructTree();
 
 async function main() {
-  // TODO: how do we prove to the server we're on the nice list? 
+  const name = process.argv.slice(2)[0];
+  const proof = TREE.getProof(niceList.indexOf(name));
 
   const { data: gift } = await axios.post(`${serverUrl}/gift`, {
-    // TODO: add request body parameters here!
+    name: name,
+    proof: proof,
   });
 
-  console.log({ gift });
+  // console.log({ gift });
 }
 
 main();
